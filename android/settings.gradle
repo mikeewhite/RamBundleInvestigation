@@ -1,0 +1,3 @@
+rootProject.name = 'RamBundleInvestigation'
+
+include ':app'
