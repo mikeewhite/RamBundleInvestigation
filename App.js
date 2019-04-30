@@ -1,29 +1,54 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Example app to test RAM bundle line mappings
  *
  * @format
  * @flow
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View, Button} from 'react-native';
+import BadCode from './badCode.js';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+function triggerException1() {
+  bogusFunction();
+}
+
+function triggerException2() {
+  // Add some lines that shouldn't be minified before and after the crashing call
+  // to see if they affect the symbolication
+  console.log('Line 1');
+  console.log('Line 2');
+  bogusFunction();
+  console.log('Line 3');
+  console.log('Line 4');
+}
+
+function triggerException3() {
+  // Calls out to crashing code in another file
+  BadCode.crash();
+}
+
+function triggerHandledException() {
+  bogusHandledFunction();
+}
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Button title="Unhandled Error 1" onPress={triggerException1} />
+        <Button title="Unhandled Error 2" onPress={triggerException2} />
+        <Button title="Unhandled Error 3" onPress={triggerException3} />
+        <Button
+          title="Handled Error 1"
+          onPress={() => {
+            try { // execute crashy code
+              triggerHandledException();
+            } catch (error) {
+              console.error(error);
+            }
+          }} />
       </View>
     );
   }
