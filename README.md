@@ -2,6 +2,13 @@
 
 This is a test React Native application to demonstrate the current line mapping issues with RAM bundled apps.
 
+It has four crash scenarios (each one can be triggered by pressing the appropriate button when the app is running):
+
+- Unhandled error 1 : Crashing code lies outside of JSX within a vanilla JS block.
+- Unhandled error 2 : Same as (1) but the crashing call is padded with additional lines.
+- Unhandled error 3 : Same as (1) but calls out to crashing code in another file.
+- Handled error 1 : Same as (1) except that the crashing code is wrapped in a try/catch block within a JSX component.
+
 ## Running the app
 
 ```bash
