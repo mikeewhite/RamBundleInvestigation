@@ -1,5 +1,7 @@
 # RAM Bundle Investigation
 
+See https://github.com/facebook/metro/issues/399
+
 This is a test React Native application to demonstrate the current line mapping issues with RAM bundled apps.
 
 It has four crash scenarios (each one can be triggered by pressing the appropriate button when the app is running):
